@@ -83,7 +83,7 @@ def extract_trace_sequences(
     # Build trace strings
     seqs = (
         df.groupby(case_col)[activity_col]
-        .apply(lambda s: " ".join(s.astype(str).tolist()))
+        .apply(lambda s: " ".join(s.apply(lambda a: a.replace(" ", "_"))))
         .rename("trace_str")
         .to_frame()
     )
@@ -101,6 +101,9 @@ def extract_trace_sequences(
         )
     else:
         seqs["variant"] = seqs["trace_str"]
+
+    # PM4Py downstream requires case IDs as index
+    seqs = seqs.set_index("case:concept:name")
 
     return seqs
 
@@ -131,7 +134,7 @@ def vectorize(sequences, method="both"):
     artifacts = {}
 
     # ----- TF-IDF + SVD -----
-    if method in ("both", "tfidf"):
+    if method in ("both", "tfidf_svd"):
         tfidf = TfidfVectorizer(
             token_pattern=r"[^ ]+",
             lowercase=False,
@@ -145,7 +148,7 @@ def vectorize(sequences, method="both"):
 
         X_tfidf_std = StandardScaler().fit_transform(X_tfidf_svd)
 
-        encoders["TFIDF_SVD"] = X_tfidf_std
+        encoders["tfidf_svd"] = X_tfidf_std
         artifacts["tfidf"] = tfidf
         artifacts["svd"] = svd
 
@@ -177,7 +180,7 @@ def vectorize(sequences, method="both"):
         ])
         X_doc2vec_std = StandardScaler().fit_transform(X_doc2vec)
 
-        encoders["DOC2VEC"] = X_doc2vec_std
+        encoders["doc2vec"] = X_doc2vec_std
         artifacts["doc2vec_model"] = model
 
     return encoders, artifacts
