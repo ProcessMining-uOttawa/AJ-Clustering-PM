@@ -1,0 +1,7 @@
+Abstraction,# Event Classes,# Traces,Avg Trace Length,# Trace Variants,Variability Ratio,# DFG Edges
+Raw log,33,300,69.09,300,1.0,802
+k = 30,29,300,46.23,298,0.993,845
+k = 18,18,300,21.42,239,0.797,648
+k = 15,15,300,17.29,199,0.663,622
+k = 8,8,300,14.75,167,0.557,539
+k = 5,5,300,12.55,123,0.41,473
