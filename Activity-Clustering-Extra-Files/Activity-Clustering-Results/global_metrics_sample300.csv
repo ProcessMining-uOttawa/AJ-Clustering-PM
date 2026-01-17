@@ -1,0 +1,2 @@
+Method,Cluster,NumTraces,Precision,Fitness,FScore,VariabilityRatio
+Global,Global,300,0.034767200293290945,0.9760686990415227,0.0671427993048521,1.0
